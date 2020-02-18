@@ -3,7 +3,20 @@
 #import certain modules/ packages
 import requests
 import json 
+import os
+
 from datetime import datetime
+
+from dotenv import load_dotenv
+from environs import Env
+
+load_dotenv()
+
+#alpha_advantage specific 
+from alpha_vantage.timeseries import TimeSeries
+from alpha_vantage.techindicators import TechIndicators
+from matplotlib.pyplot import figure
+import matplotlib.pyplot as plt
 
 #defining key variables
 now = datetime.now()
@@ -14,6 +27,9 @@ def to_usd(my_price):
     return "${0:,.2f}".format(my_price)
 
 
+# Your key here
+ALPHA_VANTAGE_API_KEY = os.environ.get("ALPHAVANTAGE_API_KEY")
+
 
 
 
@@ -22,7 +38,7 @@ symbol = input(print("Please input a stock ticker for a stock you which to get a
 
 
 #scrapping what is required from web 
-request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + symbol + "&apikey=demo"
+request_url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={ALPHA_VANTAGE_API_KEY}"
 
 response = requests.get(request_url)
 
@@ -31,6 +47,12 @@ print(response.status_code) #> 200
 
 #parse from the response text into dictionary
 parsed_response = json.loads(response.text)
+
+#handle response errors
+if "Error Message" in response.text:
+    print("OOPS couldn't find that symbol, please try again and input symbols in the following format: MSFT")
+    exit()
+
 #print(parsed_response)
 latest_refresh = parsed_response["Meta Data"]["3. Last Refreshed"]
 
