@@ -37,13 +37,17 @@ latest_close = parsed_response["Time Series (Daily)"][latest_day_applicable]["4.
 
 #define local variables
 max = 0.0
+min = 1000.0
 y = 0
 x = 0
 #use while loop to calc. max 
 while (x <= 100 and y < len(time_series_keys)):
     high = float(parsed_response["Time Series (Daily)"][time_series_keys[y]]["2. high"])
+    low = float(parsed_response["Time Series (Daily)"][time_series_keys[y]]["3. low"])
     if max < high:
         max = high
+    elif min > low:
+        min = low
     else:
         y +=1
         x +=1
@@ -63,7 +67,7 @@ print("-------------------------")
 print("LATEST DAY: " + latest_refresh )
 print("LATEST CLOSE: " + to_usd(float(latest_close)))
 print("RECENT HIGH: " + to_usd(max))
-print("RECENT LOW: $99,000.00")
+print("RECENT LOW: "+ to_usd(min))
 print("-------------------------")
 print("RECOMMENDATION: BUY!")
 print("RECOMMENDATION REASON: TODO")
