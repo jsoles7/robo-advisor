@@ -51,6 +51,7 @@ parsed_response = json.loads(response.text)
 #handle response errors
 if "Error Message" in response.text:
     print("OOPS couldn't find that symbol, please try again and input symbols in the following format: MSFT")
+    print("Please try run the program again")
     exit()
 
 #print(parsed_response)
