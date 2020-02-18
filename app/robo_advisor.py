@@ -14,8 +14,15 @@ def to_usd(my_price):
     return "${0:,.2f}".format(my_price)
 
 
+
+
+
+#receiving client inputs
+symbol = input(print("Please input a stock ticker for a stock you which to get advice on: "))
+
+
 #scrapping what is required from web 
-request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=MSFT&apikey=demo"
+request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + symbol + "&apikey=demo"
 
 response = requests.get(request_url)
 
@@ -40,7 +47,7 @@ max = 0.0
 min = 1000.0
 y = 0
 x = 0
-#use while loop to calc. max 
+#use while loop to calc. max and min
 while (x <= 100 and y < len(time_series_keys)):
     high = float(parsed_response["Time Series (Daily)"][time_series_keys[y]]["2. high"])
     low = float(parsed_response["Time Series (Daily)"][time_series_keys[y]]["3. low"])
@@ -53,13 +60,11 @@ while (x <= 100 and y < len(time_series_keys)):
         x +=1
 
 
-#receiving client inputs
- 
 
 
 #Program outputs
 print("-------------------------")
-print("SELECTED SYMBOL: XYZ")
+print("SELECTED SYMBOL: " + symbol)
 print("-------------------------")
 print("REQUESTING STOCK MARKET DATA...")
 print("REQUEST AT: " + now.strftime("%Y-%m-%d %I:%M %p"))
