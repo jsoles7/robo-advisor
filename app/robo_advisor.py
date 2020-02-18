@@ -30,8 +30,24 @@ latest_refresh = parsed_response["Meta Data"]["3. Last Refreshed"]
 
 #establishing output variables
 time_series_keys = list(parsed_response["Time Series (Daily)"].keys())
-latest_day_applicable = time_series_keys[0]
+latest_day_applicable = time_series_keys[0] 
 latest_close = parsed_response["Time Series (Daily)"][latest_day_applicable]["4. close"]
+
+#recent high calculations
+
+#define local variables
+max = 0.0
+y = 0
+x = 0
+#use while loop to calc. max 
+while (x <= 100 and y < len(time_series_keys)):
+    high = float(parsed_response["Time Series (Daily)"][time_series_keys[y]]["2. high"])
+    if max < high:
+        max = high
+    else:
+        y +=1
+        x +=1
+
 
 #receiving client inputs
  
@@ -46,7 +62,7 @@ print("REQUEST AT: " + now.strftime("%Y-%m-%d %I:%M %p"))
 print("-------------------------")
 print("LATEST DAY: " + latest_refresh )
 print("LATEST CLOSE: " + to_usd(float(latest_close)))
-print("RECENT HIGH: $101,000.00")
+print("RECENT HIGH: " + to_usd(max))
 print("RECENT LOW: $99,000.00")
 print("-------------------------")
 print("RECOMMENDATION: BUY!")
