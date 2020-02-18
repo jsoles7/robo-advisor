@@ -1,20 +1,24 @@
 # app/robo_advisor.py
 
-#import certain packages
+#import certain modules/ packages
 import requests
+import json 
 
 
 #scrapping what is required from web 
-request_url = ""
+request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=5min&apikey=demo "
 
 response = requests.get(request_url)
 
+print(response.status_code) #> 200
+#print(response.text)
 
-print(response.status_code)
-print(response.text)
+#parse 
+parsed_response = json.loads(response.text)
 
+print(parsed_response)
 #receiving client inputs
-
+ 
 
 
 #Program outputs
