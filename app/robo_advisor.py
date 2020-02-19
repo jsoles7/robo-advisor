@@ -86,6 +86,7 @@ column_names= ["Timestamp", "Open", "High", "Low", "Close", "Volume"]
 #define counters
 total_volume = 0
 total_close = 0.0
+movement = 0.0;
 
 #write in the items to the file
 with open(csv_filepath, "w") as file:
@@ -132,7 +133,7 @@ while (x <= 100 and y < len(time_series_keys)):
         x +=1
 
 
-
+ 
 
 #the famous proprietary algorithm ;)
 
@@ -184,6 +185,7 @@ print("")
 
 #data visualization
 #this was adopted from the alpha vantage customer service website/ github
+#https://medium.com/alpha-vantage/get-started-with-alpha-vantage-data-619a70c7f33a
 
 key = ALPHA_VANTAGE_API_KEY
 ts = TimeSeries(key, output_format='pandas')
@@ -191,13 +193,68 @@ ti = TechIndicators(key)
 
 # Get the data, returns a tuple
 # aapl_data is a pandas dataframe, aapl_meta_data is a dict
-aapl_data, aapl_meta_data = ts.get_daily(symbol=symbol)
+stock_data, stock_meta_data = ts.get_daily(symbol=symbol)
 # aapl_sma is a dict, aapl_meta_sma also a dict
-aapl_sma, aapl_meta_sma = ti.get_sma(symbol=symbol)
+stock_sma, stock_meta_sma = ti.get_sma(symbol=symbol)
 
 # Visualization
 figure(num=None, figsize=(15, 6), dpi=80, facecolor='w', edgecolor='k')
-aapl_data['4. close'].plot()
+stock_data['4. close'].plot()
 plt.tight_layout()
 plt.grid()
 plt.show()
+
+
+#sending an email part
+#the code below is taken from prof. Rossetti's format for emailing content - this has been slightly adjusted to fit the
+#variables and parameters of this code
+#NOTE: this is mostly his code
+
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+
+
+#get customer email
+print("")
+CUST_ADDRESS = input("Input your email to receieve alerts for price movement news on your selected stock: ")
+print("")
+print("")
+print("")
+
+#calc movement 
+movement = (float(latest_close) - (average_price) )/ average_price
+
+#only send the email if the price movement is significant 
+if movement > 0.1 or movement < (-.1):
+    SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
+    SENDGRID_TEMPLATE_ID = os.environ.get("SENDGRID_TEMPLATE_ID")
+    MY_ADDRESS = os.environ.get("EMAIL")
+    SUBJECT = 'Stock Price Movement Alert'
+
+
+    client = SendGridAPIClient(SENDGRID_API_KEY)
+    print("CLIENT:", type(client))
+
+    message = Mail(from_email=MY_ADDRESS, to_emails=CUST_ADDRESS, subject=SUBJECT)
+    print("MESSAGE:", type(message))
+
+message.template_id = SENDGRID_TEMPLATE_ID
+
+
+    message.dynamic_template_data = {
+        "symbol": symbol,
+        "human_friendly_timestamp": now.strftime("%d-%m-%Y %I:%M %p"),
+        "movement":
+    }   # or construct this dictionary dynamically based on the results of some other process :-D
+
+    try:
+        response = client.send(message)
+        print("RESPONSE:", type(response))
+        print(response.status_code)
+        print(response.body)
+        print(response.headers)
+
+    except Exception as e:
+        print("OOPS", e)
+
+
