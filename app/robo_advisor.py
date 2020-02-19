@@ -4,6 +4,7 @@
 import requests
 import json 
 import os
+import csv 
 
 from datetime import datetime
 
@@ -51,9 +52,10 @@ parsed_response = json.loads(response.text)
 
 #handle response errors
 if "Error Message" in response.text:
-    print("OOPS couldn't find that symbol, please try again and input symbols in the following format: MSFT")
-    print("Please try run the program again")
+    print("OOPS, couldn't find that symbol, please try again and input symbols in the following format: MSFT")
+    print("Please try run the program again. Thank you!")
     exit()
+
 
 #print(parsed_response)
 latest_refresh = parsed_response["Meta Data"]["3. Last Refreshed"]
@@ -63,6 +65,33 @@ latest_refresh = parsed_response["Meta Data"]["3. Last Refreshed"]
 time_series_keys = list(parsed_response["Time Series (Daily)"].keys())
 latest_day_applicable = time_series_keys[0] 
 latest_close = parsed_response["Time Series (Daily)"][latest_day_applicable]["4. close"]
+
+#writing the data to a file
+#define file name
+file_name = f"data/prices_{symbol}.csv" 
+csv_filepath = os.path.join(os.path.dirname(__file__), "..", "data", file_name)
+
+#define column names
+column_names= ["Timestamp", "Open", "High", "Low", "Close", "Volume"]
+
+
+#write in the items to the file
+with open(csv_filepath, "w") as file:
+    writer = csv.DictWriter(file, column_names)
+    writer.writeheader()
+    for d in parsed_response["Time Series (Daily)"]:
+        #loop each different timestamp row using this established row format 
+        writer.writerow({
+            "Timestamp": "x",
+            "Open": "x",
+            "High": "x",
+            "Low": "x",
+            "Close": "x",
+            "Volume": "x",
+        })
+
+
+file.close()
 
 #recent high calculations
 
