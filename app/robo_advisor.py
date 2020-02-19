@@ -21,6 +21,7 @@ import matplotlib.pyplot as plt
 
 #defining key variables
 now = datetime.now()
+decision = ""
 
 #defining applicable functions for main program
 #to_usd function adapted from that one given/ developed by Professor Rossetti
@@ -70,6 +71,7 @@ latest_refresh = parsed_response["Meta Data"]["3. Last Refreshed"]
 time_series_keys = list(parsed_response["Time Series (Daily)"].keys())
 latest_day_applicable = time_series_keys[0] 
 latest_close = parsed_response["Time Series (Daily)"][latest_day_applicable]["4. close"]
+latest_volume = parsed_response["Time Series (Daily)"][latest_day_applicable]["5. volume"]
 
 
 
@@ -81,7 +83,9 @@ csv_filepath = os.path.join(os.path.dirname(__file__), "..", "data", file_name)
 
 #define column names
 column_names= ["Timestamp", "Open", "High", "Low", "Close", "Volume"]
-
+#define counters
+total_volume = 0
+total_close = 0.0
 
 #write in the items to the file
 with open(csv_filepath, "w") as file:
@@ -99,8 +103,13 @@ with open(csv_filepath, "w") as file:
             "Volume": parsed_response["Time Series (Daily)"][date]["5. volume"],
         })
 
+        #use some counters to get averages later
+        total_volume += int(parsed_response["Time Series (Daily)"][date]["5. volume"])
+        total_close += float(parsed_response["Time Series (Daily)"][date]["4. close"])
+
 
 file.close()
+
 
 
 
@@ -125,6 +134,33 @@ while (x <= 100 and y < len(time_series_keys)):
 
 
 
+#the famous proprietary algorithm ;)
+
+#calculate averages to use for algorithm
+average_volume = total_volume/(len(time_series_keys))
+average_price = total_close/(len(time_series_keys))
+adjusted_low_average = 0.4 * average_price
+adjusted_low_volume = 0.2 * average_volume
+
+#establishing an algocounter 
+algo_counter = 0
+#algorithm calculations
+if float(latest_close) < adjusted_low_average:
+    algo_counter += 1
+if int(latest_volume) < adjusted_low_volume:
+    algo_counter += 1
+
+
+#the final and most crucial if
+if algo_counter >= 5:
+    decision = 'Buy'
+elif algo_counter >=3:
+    decision = "Neutral Weighting"
+else:
+    decision = "Sell"
+
+
+
 #Program outputs
 print("-------------------------")
 print("SELECTED SYMBOL: " + symbol)
@@ -137,7 +173,7 @@ print("LATEST CLOSE: " + to_usd(float(latest_close)))
 print("RECENT HIGH: " + to_usd(max))
 print("RECENT LOW: "+ to_usd(min))
 print("-------------------------")
-print("RECOMMENDATION: BUY!")
+print("RECOMMENDATION: " + decision)
 print("RECOMMENDATION REASON: TODO")
 print("-------------------------")
 print("HAPPY INVESTING!")
