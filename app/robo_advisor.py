@@ -66,9 +66,12 @@ time_series_keys = list(parsed_response["Time Series (Daily)"].keys())
 latest_day_applicable = time_series_keys[0] 
 latest_close = parsed_response["Time Series (Daily)"][latest_day_applicable]["4. close"]
 
+
+
+
 #writing the data to a file
 #define file name
-file_name = f"data/prices_{symbol}.csv" 
+file_name = f"prices_{symbol}.csv" 
 csv_filepath = os.path.join(os.path.dirname(__file__), "..", "data", file_name)
 
 #define column names
@@ -76,18 +79,20 @@ column_names= ["Timestamp", "Open", "High", "Low", "Close", "Volume"]
 
 
 #write in the items to the file
+
+
 with open(csv_filepath, "w") as file:
     writer = csv.DictWriter(file, column_names)
     writer.writeheader()
-    for d in parsed_response["Time Series (Daily)"]:
+    for date in time_series_keys:
         #loop each different timestamp row using this established row format 
         writer.writerow({
-            "Timestamp": "x",
-            "Open": "x",
-            "High": "x",
-            "Low": "x",
-            "Close": "x",
-            "Volume": "x",
+            "Timestamp": date,
+            "Open": parsed_response["Time Series (Daily)"][date]["1. open"],
+            "High": parsed_response["Time Series (Daily)"][date]["2. high"],
+            "Low": parsed_response["Time Series (Daily)"][date]["3. low"],
+            "Close": parsed_response["Time Series (Daily)"][date]["4. close"],
+            "Volume": parsed_response["Time Series (Daily)"][date]["5. volume"],
         })
 
 
