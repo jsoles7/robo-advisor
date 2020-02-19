@@ -42,7 +42,8 @@ request_url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&sym
 
 response = requests.get(request_url)
 
-print(response.status_code) #> 200
+#some quick checks
+#print(response.status_code) #> 200
 #print(response.text)
 
 #parse from the response text into dictionary
