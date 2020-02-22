@@ -5,6 +5,7 @@ import requests
 import json 
 import os
 import csv 
+import matplotlib.pyplot as plt
 
 from datetime import datetime
 
@@ -17,7 +18,7 @@ load_dotenv()
 from alpha_vantage.timeseries import TimeSeries
 from alpha_vantage.techindicators import TechIndicators
 from matplotlib.pyplot import figure
-import matplotlib.pyplot as plt
+
 
 #defining key variables
 now = datetime.now()
