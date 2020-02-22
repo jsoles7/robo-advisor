@@ -223,6 +223,7 @@ print("")
 
 #calc movement 
 movement = (float(latest_close) - (average_price) )/ average_price
+movement_str = f"{0:,.2f}%".format(movement)
 
 #only send the email if the price movement is significant 
 if movement > 0.1 or movement < (-.1):
@@ -238,14 +239,14 @@ if movement > 0.1 or movement < (-.1):
     message = Mail(from_email=MY_ADDRESS, to_emails=CUST_ADDRESS, subject=SUBJECT)
     print("MESSAGE:", type(message))
 
-message.template_id = SENDGRID_TEMPLATE_ID
+    message.template_id = SENDGRID_TEMPLATE_ID
 
 
     message.dynamic_template_data = {
         "symbol": symbol,
         "human_friendly_timestamp": now.strftime("%d-%m-%Y %I:%M %p"),
-        "movement":
-    }   # or construct this dictionary dynamically based on the results of some other process :-D
+        "movement": movement_str
+        }# or construct this dictionary dynamically based on the results of some other process :-D
 
     try:
         response = client.send(message)
