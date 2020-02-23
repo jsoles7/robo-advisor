@@ -91,6 +91,14 @@ latest_volume = parsed_response["Time Series (Daily)"][latest_day_applicable]["5
 
 
 
+
+
+
+
+
+
+
+
 #writing the data to a file
 #define file name
 file_name = f"prices_{symbol}.csv" 
@@ -123,8 +131,12 @@ with open(csv_filepath, "w") as file:
         total_volume += int(parsed_response["Time Series (Daily)"][date]["5. volume"])
         total_close += float(parsed_response["Time Series (Daily)"][date]["4. close"])
 
-
+#close the file
 file.close()
+
+#END of file writing 
+
+
 
 
 
@@ -170,10 +182,24 @@ if int(latest_volume) < adjusted_low_volume:
 #the final and most crucial if
 if algo_counter >= 5:
     decision = 'Buy'
+    reason = "Due to the numerous functions and analyses the program run, the stock was identified as having the potential to be undervalued. "
+    reason = reason + "FinServ's algorithm looked at the stock's relation to trading patterns and identified it as being in a dip. "
+    reason = reason + "With this as the case, there is a stronger chance of regression to the mean, implying some upside to be made! "
+    reason = reason + "Feel free to check out more on this theory of investing @ https://www.investopedia.com/articles/active-trading/102914/technical-analysis-strategies-beginners.asp"
 elif algo_counter >=3:
     decision = "Neutral Weighting"
+    reason = "Due to the numerous functions and analyses the program run, the stock was identified as having the potential to be neither overvalued or undervalued. "
+    reason = reason + "FinServ's algorithm looked at the stock's relation to trading patterns and identified it as being inline with current performance. "
+    reason = reason + "With this as the case, there is a minimal chance of regression to the mean, implying some no upside or downside. "
+    reason = reason + "Feel free to check out more on this theory of investing @ https://www.investopedia.com/articles/active-trading/102914/technical-analysis-strategies-beginners.asp"
 else:
     decision = "Sell"
+    reason = "Due to the numerous functions and analyses the program run, the stock was identified as having the potential to be overvalued. "
+    reason = reason + "FinServ's algorithm looked at the stock's relation to trading patterns and identified it as being at a crest. "
+    reason = reason + "With this as the case, there is a stronger chance of regression to the mean, implying some downside to potentially be met. "
+    reason = reason + "Feel free to check out more on this theory of investing @ https://www.investopedia.com/articles/active-trading/102914/technical-analysis-strategies-beginners.asp"
+
+
 
 
 
@@ -190,7 +216,7 @@ print("RECENT HIGH: " + to_usd(max))
 print("RECENT LOW: "+ to_usd(min))
 print("-------------------------")
 print("RECOMMENDATION: " + decision)
-print("RECOMMENDATION REASON: TODO")
+print("RECOMMENDATION REASON: " + reason)
 print("-------------------------")
 print("HAPPY INVESTING!")
 print("-------------------------")
