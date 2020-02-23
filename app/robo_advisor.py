@@ -267,3 +267,12 @@ if customer_response_email == 'YES':
             print("OOPS", e)
 
 
+
+
+#concluding statement to thank the client for using the service
+print("")
+print("")
+print("Thank you for using FinServ 2.0 Robo Stock Advisor! We hope you got the information you were looking for \n")
+print("If you think there is a way we can improve our service, contact us at customerrelations@finserv.io")
+print("")
+print("")
