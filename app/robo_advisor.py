@@ -44,7 +44,21 @@ print("To use this program, input a stock ticker of your choice and receive a re
 print("")
 symbol = input(print("Please input a stock ticker for a stock you which to get advice on: "))
 
+#some quick prelimenary input validation (in order to save time of issuing a get request)
 
+if symbol.isdigit() == True:
+    print("")
+    print("OOPS, couldn't find that symbol, please try again and input symbols in the following format: MSFT")
+    print("Please try run the program again. Thank you!")
+    print("")
+    exit()
+
+if len(symbol) > 5:
+    print("OOPS, couldn't find that symbol, please try again and input symbols in the following format: MSFT")
+    print("Please try run the program again. Thank you!")
+    exit()
+
+#proceed to scrape, one additional input check is provided below to catch any other errors 
 #scrapping what is required from web 
 request_url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={ALPHA_VANTAGE_API_KEY}"
 
