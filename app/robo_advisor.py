@@ -90,11 +90,38 @@ latest_volume = parsed_response["Time Series (Daily)"][latest_day_applicable]["5
 
 
 
+#52-week data importing
+
+#scrapping what is required from web 
+request_url_52 = f"https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol={symbol}&apikey={ALPHA_VANTAGE_API_KEY}"
+
+response_52 = requests.get(request_url_52)
+#parse from the response text into dictionary
+parsed_response_52 = json.loads(response_52.text)
 
 
+#get in all the different weeks
+j = 0
 
+while j <= 52:
+    time_series_weekly_keys = list(parsed_response_52["Weekly Time Series"].keys())
+    j +=1
 
-
+#high and low calculations
+#recent high/ low calculations
+#define local variables
+max_52 = 0.0
+min_52 = 1000.0
+t = 0
+#use while loop to calc. max and min
+while (t < 53):
+    high_52 = float(parsed_response_52["Weekly Time Series"][time_series_weekly_keys[t]]["2. high"])
+    low_52 = float(parsed_response_52["Weekly Time Series"][time_series_weekly_keys[t]]["3. low"])
+    if max_52 < high_52:
+        max_52 = high_52
+    elif min_52 > low_52:
+        min_52 = low_52
+    t +=1
 
 
 
@@ -155,9 +182,10 @@ while (x <= 100 and y < len(time_series_keys)):
         max = high
     elif min > low:
         min = low
-    else:
-        y +=1
-        x +=1
+    
+    y +=1
+    x +=1
+     
 
 
  
@@ -214,6 +242,9 @@ print("LATEST DAY: " + latest_refresh )
 print("LATEST CLOSE: " + to_usd(float(latest_close)))
 print("RECENT HIGH: " + to_usd(max))
 print("RECENT LOW: "+ to_usd(min))
+print("-------------------------")
+print("52-WEEK HIGH: " + to_usd(max_52))
+print("52-WEEK LOW: "+ to_usd(min_52))
 print("-------------------------")
 print("RECOMMENDATION: " + decision)
 print("RECOMMENDATION REASON: " + reason)

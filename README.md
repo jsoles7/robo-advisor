@@ -30,6 +30,7 @@ Navigate to the file from the commandline: <br />
 conda create -n shopping-env python=3.7 # (first time only) <br />
 conda activate shopping-env <br />
 <br />
+
 Proceed to download the following packages <br />
 - pip install python-dotenv <br />
 - pip install sendgrid==6.0.5 <br />
@@ -40,7 +41,7 @@ Proceed to download the following packages <br />
 - pip install alpha_vantage <br />
 
 <br />
-**Note that you can simply run the command 'pip install requirements.txt' to expedite the above process
+**Note that you can simply run the command 'pip install -r requirements.txt' to expedite the above process
 <br />
 
 Make sure to configure your env to fit the required variables: <br />
