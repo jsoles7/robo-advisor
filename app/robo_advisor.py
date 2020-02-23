@@ -87,7 +87,7 @@ column_names= ["Timestamp", "Open", "High", "Low", "Close", "Volume"]
 #define counters
 total_volume = 0
 total_close = 0.0
-movement = 0.0;
+movement = 0.0
 
 #write in the items to the file
 with open(csv_filepath, "w") as file:
@@ -206,57 +206,64 @@ plt.grid()
 plt.show()
 
 
-#sending an email part
-#the code below is taken from prof. Rossetti's format for emailing content - this has been slightly adjusted to fit the
-#variables and parameters of this code
-#NOTE: this is mostly his code
-
+#get customer email
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
+#first verify if customer wants to get an email (important for UX)
+customer_response_email = input("Would you like to enter your email in order to receive price movement alerts? (Enter 'YES' if so) ")
+customer_response_email = customer_response_email.upper()
+#if customer wants to get an email, run the email-sending code 
+if customer_response_email == 'YES':
 
-#get customer email
-print("")
-CUST_ADDRESS = input("Input your email to receieve alerts for price movement news on your selected stock: ")
-print("")
-print("")
-print("")
+    #ask for email 
+    print("")
+    CUST_ADDRESS = input("Input your email to receieve alerts for price movement news on your selected stock: ")
+    print("")
+    print("")
+    print("")
 
-#calc movement 
-movement = (float(latest_close) - (average_price) )/ average_price
-movement_str = f"{0:,.2f}%".format(movement)
+    #calc movement 
+    movement = (float(latest_close) - (average_price) )/ average_price
+    movement_str = f"{0:,.2f}%".format(movement)
 
-#only send the email if the price movement is significant 
-if movement > 0.1 or movement < (-.1):
-    SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
-    SENDGRID_TEMPLATE_ID = os.environ.get("SENDGRID_TEMPLATE_ID")
-    MY_ADDRESS = os.environ.get("EMAIL")
-    SUBJECT = 'Stock Price Movement Alert'
+    #only send the email if the price movement is significant 
 
+    #sending an email part
+    #the code below is taken from prof. Rossetti's format for emailing content - this has been slightly adjusted to fit the
+    #variables and parameters of this code
+    #NOTE: this is mostly his code
 
-    client = SendGridAPIClient(SENDGRID_API_KEY)
-    print("CLIENT:", type(client))
-
-    message = Mail(from_email=MY_ADDRESS, to_emails=CUST_ADDRESS, subject=SUBJECT)
-    print("MESSAGE:", type(message))
-
-    message.template_id = SENDGRID_TEMPLATE_ID
+    if ( movement > 0.1 or movement < (-.1) ):
+        SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
+        SENDGRID_TEMPLATE_ID = os.environ.get("SENDGRID_TEMPLATE_ID")
+        MY_ADDRESS = os.environ.get("EMAIL")
+        SUBJECT = 'Stock Price Movement Alert'
 
 
-    message.dynamic_template_data = {
-        "symbol": symbol,
-        "human_friendly_timestamp": now.strftime("%d-%m-%Y %I:%M %p"),
-        "movement": movement_str
-        }# or construct this dictionary dynamically based on the results of some other process :-D
+        client = SendGridAPIClient(SENDGRID_API_KEY)
+        print("CLIENT:", type(client))
 
-    try:
-        response = client.send(message)
-        print("RESPONSE:", type(response))
-        print(response.status_code)
-        print(response.body)
-        print(response.headers)
+        message = Mail(from_email=MY_ADDRESS, to_emails=CUST_ADDRESS, subject=SUBJECT)
+        print("MESSAGE:", type(message))
 
-    except Exception as e:
-        print("OOPS", e)
+        message.template_id = SENDGRID_TEMPLATE_ID
+
+
+        message.dynamic_template_data = {
+            "symbol": symbol,
+            "human_friendly_timestamp": now.strftime("%d-%m-%Y %I:%M %p"),
+            "movement": movement_str
+            }# or construct this dictionary dynamically based on the results of some other process :-D
+
+        try:
+            response = client.send(message)
+            print("RESPONSE:", type(response))
+            print(response.status_code)
+            print(response.body)
+            print(response.headers)
+
+        except Exception as e:
+            print("OOPS", e)
 
 
