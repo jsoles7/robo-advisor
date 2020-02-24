@@ -53,7 +53,7 @@ In addition to what was said above, make sure to configure your env to fit the r
 - Sendgrid API TEMPLATE <br />
 - An email address to use for sending and receiving emailed alerts <br />
 
-For information on how to obtain a Sendgrid API key and tempate (it's very easy by the way so don't be too concerned), check out these two explanatory links: <br />
+For information on how to obtain a Sendgrid API key and tempate (it's very easy by the way so don't be too concerned), check out these three explanatory links: <br />
 - https://github.com/prof-rossetti/intro-to-python/blob/master/notes/python/packages/sendgrid.md
 - https://github.com/prof-rossetti/intro-to-python/blob/master/notes/python/packages/sendgrid.md#email-templates
 - https://github.com/prof-rossetti/intro-to-python/blob/master/exercises/emails-with-templates/send_email.py

@@ -3,3 +3,4 @@ python-dotenv
 alpha_vantage
 pandas
 matplotlib
+sendgrid 
