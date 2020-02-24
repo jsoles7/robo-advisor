@@ -129,8 +129,8 @@ for s in symbols_list:
     #parse from the response text into dictionary
     parsed_response_52 = json.loads(response_52.text)
 
-    wsd = parsed_response_52["Weekly Time Series"]
-    time_series_weekly_keys = list(wsd.keys())
+    
+    time_series_weekly_keys = list(parsed_response_52["Weekly Time Series"].keys())
  
 
     #high and low calculations
@@ -275,9 +275,6 @@ for s in symbols_list:
     print("RECOMMENDATION: " + decision)
     print("RECOMMENDATION REASON: " + reason)
     print("-------------------------")
-    print("HAPPY INVESTING!")
-    print("-------------------------")
-    print("")
     print("")
 
 
@@ -355,9 +352,13 @@ for s in symbols_list:
 
             except Exception as e:
                 print("OOPS", e)
+                
 
-
-
+print("")
+print("-------------------------")
+print("HAPPY INVESTING!")
+print("-------------------------")
+print("")
 
 #concluding statement to thank the client for using the service
 print("")
