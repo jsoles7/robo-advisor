@@ -51,7 +51,7 @@ symbol = ""
 #input multiple stocks:
 while symbol != "DONE":
     symbol = input(print("Please input a stock ticker for a stock you which to get advice on. When you are done entering tickers, please type DONE: "))
-
+    symbol = symbol.upper()
     #some quick prelimenary input validation (in order to save time of issuing a get request)
 
     if symbol.isdigit() == True:
@@ -129,8 +129,6 @@ for s in symbols_list:
     #parse from the response text into dictionary
     parsed_response_52 = json.loads(response_52.text)
 
-    print(response_52.status_code)
-    print(parsed_response_52)
 
     overall_keys = list(parsed_response_52.keys())
     wts = overall_keys[1]
