@@ -64,8 +64,7 @@ Run the recommendation script: <br />
 - python app/robo-advisor.py  <br />
 
 ## User Instructions:
-The command line will ask the user to input as many stock tickers as you like <br />
-Note that in order to stop inputting stock tickers, you need to write in 'DONE' <br />
+The command line will ask the user to input as many stock tickers as you like. Note that in order to stop inputting stock tickers, you need to write in 'DONE'. <br />
 Moreover, it will ask the user if he or she would like to enter his or her email to send stock alerts. In the case that the user says yes, the email will be saved and used later on. <br />
 
 Then, the program will run on a per-stock basis (done via using a for loop). The procedure runs as follows:
@@ -79,7 +78,5 @@ Then, the program will run on a per-stock basis (done via using a for loop). The
 
 
 DISCLAIMER: the authors of this program bear no liability for gains/losses on investments made based on the outputed recommendations.
-
-
 
 
