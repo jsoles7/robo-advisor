@@ -7,3 +7,7 @@
 
 # except this gitignore file:
 !.gitignore
+
+#ignore DS_Store
+
+.DS_Store
