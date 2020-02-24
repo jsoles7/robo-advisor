@@ -129,8 +129,13 @@ for s in symbols_list:
     #parse from the response text into dictionary
     parsed_response_52 = json.loads(response_52.text)
 
-    
-    time_series_weekly_keys = list(parsed_response_52["Weekly Time Series"].keys())
+    print(response_52.status_code)
+    print(parsed_response_52)
+
+    overall_keys = list(parsed_response_52.keys())
+    wts = overall_keys[1]
+
+    time_series_weekly_keys = list(parsed_response_52[wts].keys())
  
 
     #high and low calculations
@@ -191,9 +196,6 @@ for s in symbols_list:
 
 
 
-
-
-
     #recent high/ low calculations
     #define local variables
     max = 0.0
@@ -214,7 +216,6 @@ for s in symbols_list:
         
 
 
-    
 
     #the famous proprietary algorithm ;)
 
@@ -275,6 +276,7 @@ for s in symbols_list:
     print("RECOMMENDATION: " + decision)
     print("RECOMMENDATION REASON: " + reason)
     print("-------------------------")
+    print("")
     print("")
 
 
@@ -352,7 +354,7 @@ for s in symbols_list:
 
             except Exception as e:
                 print("OOPS", e)
-                
+
 
 print("")
 print("-------------------------")
