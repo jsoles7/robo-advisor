@@ -50,7 +50,7 @@ symbol = ""
 
 #input multiple stocks:
 while symbol != "DONE":
-    symbol = input(print("Please input a stock ticker for a stock you which to get advice on. When you are done entering tickers, please type DONE: "))
+    symbol = input(print("Please input a stock ticker for a stock you which to get advice on. When you are done entering tickers (MAXIMUM of two stocks), please type DONE: "))
     symbol = symbol.upper()
     #some quick prelimenary input validation (in order to save time of issuing a get request)
 
