@@ -70,7 +70,7 @@ while symbol != "DONE":
     symbols_list.append(symbol)
 
 #first verify if customer wants to get an email (important for UX)
-customer_response_email = input("Before we begin, ould you like to enter your email in order to receive price movement alerts? (Enter 'YES' if so) ")
+customer_response_email = input("Before we begin, would you like to enter your email in order to receive price movement alerts? (Enter 'YES' if so) ")
 customer_response_email = customer_response_email.upper()
 
 if customer_response_email == "YES":
@@ -91,7 +91,7 @@ for s in symbols_list:
 
     #proceed to scrape, one additional input check is provided below to catch any other errors 
     #scrapping what is required from web 
-    request_url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={s}&apikey={ALPHA_VANTAGE_API_KEY}"
+    request_url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&outputsize=full&symbol={s}&apikey={ALPHA_VANTAGE_API_KEY}"
 
     response = requests.get(request_url)
     #some quick checks
@@ -106,35 +106,23 @@ for s in symbols_list:
         print("OOPS, couldn't find that symbol, please try again and input symbols in the following format: MSFT")
         print("Please try run the program again. Thank you!")
         exit()
-
+    elif "ValueError" in response.text:
+        print("OOPS, you have run out of free trial API calls. Please wait one minute and proceed to try again!")
+        print("Thank you!")
+        exit()
 
     #print(parsed_response)
     latest_refresh = parsed_response["Meta Data"]["3. Last Refreshed"]
 
-
     #establishing output variables
+
+    #running a while loop to collect the tradeable days info 
     time_series_keys = list(parsed_response["Time Series (Daily)"].keys())
+    
     latest_day_applicable = time_series_keys[0] 
     latest_close = parsed_response["Time Series (Daily)"][latest_day_applicable]["4. close"]
     latest_volume = parsed_response["Time Series (Daily)"][latest_day_applicable]["5. volume"]
 
-
-
-    #52-week data importing
-
-    #scrapping what is required from web 
-    request_url_52 = f"https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol={s}&apikey={ALPHA_VANTAGE_API_KEY}"
-
-    response_52 = requests.get(request_url_52)
-    #parse from the response text into dictionary
-    parsed_response_52 = json.loads(response_52.text)
-
-
-    overall_keys = list(parsed_response_52.keys())
-    wts = overall_keys[1]
-
-    time_series_weekly_keys = list(parsed_response_52[wts].keys())
- 
 
     #high and low calculations
     #recent high/ low calculations
@@ -143,9 +131,9 @@ for s in symbols_list:
     min_52 = 1000.0
     t = 0
     #use while loop to calc. max and min
-    while (t < 53):
-        high_52 = float(parsed_response_52["Weekly Time Series"][time_series_weekly_keys[t]]["2. high"])
-        low_52 = float(parsed_response_52["Weekly Time Series"][time_series_weekly_keys[t]]["3. low"])
+    while (t <= 253):
+        high_52 = float(parsed_response["Time Series (Daily)"][time_series_keys[t]]["2. high"])
+        low_52 = float(parsed_response["Time Series (Daily)"][time_series_keys[t]]["3. low"])
         if max_52 < high_52:
             max_52 = high_52
         elif min_52 > low_52:
@@ -287,10 +275,10 @@ for s in symbols_list:
     ti = TechIndicators(key)
 
     # Get the data, returns a tuple
-    # aapl_data is a pandas dataframe, aapl_meta_data is a dict
+    # stock_data is a pandas dataframe
+    # note that the API is requested one more time 
     stock_data, stock_meta_data = ts.get_daily(symbol=s)
-    # aapl_sma is a dict, aapl_meta_sma also a dict
-    stock_sma, stock_meta_sma = ti.get_sma(symbol=s)
+
 
     # Visualization
     figure(num=None, figsize=(15, 6), dpi=80, facecolor='w', edgecolor='k')
