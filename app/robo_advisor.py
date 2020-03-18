@@ -128,7 +128,7 @@ for s in symbols_list:
     #recent high/ low calculations
     #define local variables
     max_52 = 0.0
-    min_52 = 1000.0
+    min_52 = 10000.0
     t = 0
     #use while loop to calc. max and min
     while (t <= 253):
@@ -185,11 +185,11 @@ for s in symbols_list:
     #recent high/ low calculations
     #define local variables
     max = 0.0
-    min = 1000.0
+    min = 10000.0
     y = 0
     x = 0
     #use while loop to calc. max and min
-    while (x <= 100 and y < len(time_series_keys)):
+    while (x <= 100):
         high = float(parsed_response["Time Series (Daily)"][time_series_keys[y]]["2. high"])
         low = float(parsed_response["Time Series (Daily)"][time_series_keys[y]]["3. low"])
         if max < high:
@@ -221,13 +221,13 @@ for s in symbols_list:
 
 
     #the final and most crucial if
-    if algo_counter >= 5:
+    if algo_counter == 2:
         decision = 'Buy'
         reason = "Due to the numerous functions and analyses the program run, the stock was identified as having the potential to be undervalued. "
         reason = reason + "FinServ's algorithm looked at the stock's relation to trading patterns and identified it as being in a dip. "
         reason = reason + "With this as the case, there is a stronger chance of regression to the mean, implying some upside to be made! "
         reason = reason + "Feel free to check out more on this theory of investing @ https://www.investopedia.com/articles/active-trading/102914/technical-analysis-strategies-beginners.asp"
-    elif algo_counter >=3:
+    elif algo_counter == 1:
         decision = "Neutral Weighting"
         reason = "Due to the numerous functions and analyses the program run, the stock was identified as having the potential to be neither overvalued or undervalued. "
         reason = reason + "FinServ's algorithm looked at the stock's relation to trading patterns and identified it as being inline with current performance. "
@@ -239,9 +239,6 @@ for s in symbols_list:
         reason = reason + "FinServ's algorithm looked at the stock's relation to trading patterns and identified it as being at a crest. "
         reason = reason + "With this as the case, there is a stronger chance of regression to the mean, implying some downside to potentially be met. "
         reason = reason + "Feel free to check out more on this theory of investing @ https://www.investopedia.com/articles/active-trading/102914/technical-analysis-strategies-beginners.asp"
-
-
-
 
 
     #Program outputs
@@ -296,8 +293,6 @@ for s in symbols_list:
     #if customer wants to get an email, run the email-sending code 
     if customer_response_email == 'YES':
 
-        
-
         #calc movement 
         movement = (float(latest_close) - (average_price) )/ average_price
         movement_str = f"{0:,.2f}%".format(movement)
@@ -310,6 +305,7 @@ for s in symbols_list:
         #NOTE: this is mostly his code
 
         if ( movement > 0.1 or movement < (-.1) ):
+            #get variables from .env
             SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
             SENDGRID_TEMPLATE_ID = os.environ.get("SENDGRID_TEMPLATE_ID")
             MY_ADDRESS = os.environ.get("EMAIL")
@@ -323,7 +319,6 @@ for s in symbols_list:
             print("MESSAGE:", type(message))
 
             message.template_id = SENDGRID_TEMPLATE_ID
-
 
             message.dynamic_template_data = {
                 "symbol": s,
