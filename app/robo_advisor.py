@@ -24,11 +24,45 @@ from matplotlib.pyplot import figure
 now = datetime.now()
 decision = ""
 
-#defining applicable functions for main program
+#defining applicable functions for main program (avoiding code reduplication)
 #to_usd function adapted from that one given/ developed by Professor Rossetti
 def to_usd(my_price):
     return "${0:,.2f}".format(my_price)
 
+#error message printing function
+def print_input_err_message():
+    print("")
+    print("OOPS, couldn't find that symbol, please try again and input symbols in the following format: MSFT")
+    print("Please try run the program again. Thank you!")
+    print("")
+    exit()
+
+#max/ min calc functions
+def min_calc(total_days):
+
+    #define local variables
+    min_1 = 10000.0
+    t = 0
+    #use while loop to calc. max and min
+    while (t <= total_days):
+        low = float(parsed_response["Time Series (Daily)"][time_series_keys[t]]["3. low"])
+        if min_1 > low:
+            min_1 = low
+        t +=1
+    return min_1 
+
+def max_calc(total_days):
+
+    #define local variables
+    max_1 = 0
+    t = 0
+    #use while loop to calc. max and min
+    while (t <= total_days):
+        high = float(parsed_response["Time Series (Daily)"][time_series_keys[t]]["2. high"])
+        if max_1 < high:
+            max_1 = high
+        t +=1
+    return max_1 
 
 # Key here
 ALPHA_VANTAGE_API_KEY = os.environ.get("ALPHAVANTAGE_API_KEY")
@@ -55,16 +89,10 @@ while symbol != "DONE":
     #some quick prelimenary input validation (in order to save time of issuing a get request)
 
     if symbol.isdigit() == True:
-        print("")
-        print("OOPS, couldn't find that symbol, please try again and input symbols in the following format: MSFT")
-        print("Please try run the program again. Thank you!")
-        print("")
-        exit()
+        print_input_err_message()
 
     if len(symbol) > 5:
-        print("OOPS, couldn't find that symbol, please try again and input symbols in the following format: MSFT")
-        print("Please try run the program again. Thank you!")
-        exit()
+        print_input_err_message()
 
     #if it is good, add it to a list 
     symbols_list.append(symbol)
@@ -94,22 +122,16 @@ for s in symbols_list:
     request_url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&outputsize=full&symbol={s}&apikey={ALPHA_VANTAGE_API_KEY}"
 
     response = requests.get(request_url)
-    #some quick checks
-    #print(response.status_code) #> 200
-    #print(response.text)
 
     #parse from the response text into dictionary
     parsed_response = json.loads(response.text)
 
     #handle response errors
     if "Error Message" in response.text:
-        print("OOPS, couldn't find that symbol, please try again and input symbols in the following format: MSFT")
-        print("Please try run the program again. Thank you!")
-        exit()
+        print_input_err_message()
+
     elif "ValueError" in response.text:
-        print("OOPS, you have run out of free trial API calls. Please wait one minute and proceed to try again!")
-        print("Thank you!")
-        exit()
+        print_input_err_message()
 
     #print(parsed_response)
     latest_refresh = parsed_response["Meta Data"]["3. Last Refreshed"]
@@ -125,20 +147,25 @@ for s in symbols_list:
 
 
     #high and low calculations
-    #recent high/ low calculations
+    #52-week high/ low calculations
     #define local variables
-    max_52 = 0.0
-    min_52 = 10000.0
-    t = 0
-    #use while loop to calc. max and min
-    while (t <= 253):
-        high_52 = float(parsed_response["Time Series (Daily)"][time_series_keys[t]]["2. high"])
-        low_52 = float(parsed_response["Time Series (Daily)"][time_series_keys[t]]["3. low"])
-        if max_52 < high_52:
-            max_52 = high_52
-        elif min_52 > low_52:
-            min_52 = low_52
-        t +=1
+
+    max_52 = max_calc(253)
+    min_52 = min_calc(253)
+
+    # max_52 = 0.0
+    # min_52 = 10000.0
+    # t = 0
+    # #use while loop to calc. max and min
+    # while (t <= 253):
+    #     high_52 = float(parsed_response["Time Series (Daily)"][time_series_keys[t]]["2. high"])
+    #     low_52 = float(parsed_response["Time Series (Daily)"][time_series_keys[t]]["3. low"])
+    #     if max_52 < high_52:
+    #         max_52 = high_52
+    #     elif min_52 > low_52:
+    #         min_52 = low_52
+    #     t +=1
+
 
 
 
@@ -184,21 +211,24 @@ for s in symbols_list:
 
     #recent high/ low calculations
     #define local variables
-    max = 0.0
-    min = 10000.0
-    y = 0
-    x = 0
-    #use while loop to calc. max and min
-    while (x <= 100):
-        high = float(parsed_response["Time Series (Daily)"][time_series_keys[y]]["2. high"])
-        low = float(parsed_response["Time Series (Daily)"][time_series_keys[y]]["3. low"])
-        if max < high:
-            max = high
-        elif min > low:
-            min = low
+    max_100 = max_calc(100)
+    min_100 = min_calc(100)
+    
+    # max = 0.0
+    # min = 10000.0
+    # y = 0
+    # x = 0
+    # #use while loop to calc. max and min
+    # while (x <= 100):
+    #     high = float(parsed_response["Time Series (Daily)"][time_series_keys[y]]["2. high"])
+    #     low = float(parsed_response["Time Series (Daily)"][time_series_keys[y]]["3. low"])
+    #     if max < high:
+    #         max = high
+    #     elif min > low:
+    #         min = low
         
-        y +=1
-        x +=1
+    #     y +=1
+    #     x +=1
         
 
 
@@ -250,8 +280,8 @@ for s in symbols_list:
     print("-------------------------")
     print("LATEST DAY: " + latest_refresh )
     print("LATEST CLOSE: " + to_usd(float(latest_close)))
-    print("RECENT HIGH: " + to_usd(max))
-    print("RECENT LOW: "+ to_usd(min))
+    print("RECENT HIGH: " + to_usd(max_100))
+    print("RECENT LOW: "+ to_usd(min_100))
     print("-------------------------")
     print("52-WEEK HIGH: " + to_usd(max_52))
     print("52-WEEK LOW: "+ to_usd(min_52))
