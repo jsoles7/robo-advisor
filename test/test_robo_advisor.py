@@ -1,7 +1,6 @@
 
 
-from app.robo_advisor import to_usd, algo_output, input_validation, min_calc
-#, min_calc, max_calc, 
+from app.robo_advisor import to_usd, algo_output, input_validation, request_url
 
 def test_to_usd():
     #Should apply correct formatting
@@ -34,3 +33,7 @@ def test_input_validation():
     assert input_validation("TSLA") == True
 
 
+def test_request_url():
+    #Should return the correct link in proper format
+    link = request_url("MSFT", "API_KEY")
+    assert link == "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&outputsize=full&symbol=MSFT&apikey=API_KEY"

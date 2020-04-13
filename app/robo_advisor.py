@@ -113,6 +113,12 @@ def input_validation(input):
     
     return result_bool
 
+def request_url(ticker, API_key):
+
+    link = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&outputsize=full&symbol={ticker}&apikey={API_key}"
+    return link 
+
+
 #main program
 
 if __name__ == "__main__":
@@ -185,7 +191,7 @@ if __name__ == "__main__":
 
         #proceed to scrape, one additional input check is provided below to catch any other errors 
         #scrapping what is required from web 
-        request_url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&outputsize=full&symbol={s}&apikey={ALPHA_VANTAGE_API_KEY}"
+        request_url = request_url(s, ALPHA_VANTAGE_API_KEY)
 
         response = requests.get(request_url)
 
