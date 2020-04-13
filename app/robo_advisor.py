@@ -9,8 +9,6 @@ import matplotlib.pyplot as plt
 
 
 
-
-
 #defining applicable functions for main program (avoiding code reduplication)
 #to_usd function adapted from that one given/ developed by Professor Rossetti
 def to_usd(my_price):
@@ -70,6 +68,20 @@ def algo_output(algo_counter):
 
     return reason
 
+def input_validation(input):
+
+    result_bool = True 
+
+    if any(char.isdigit() for char in input) == True:
+        result_bool = False
+
+    if len(symbol) > 5:
+        result_bool = False
+    
+    return result_bool
+
+#main program
+
 if __name__ == "__main__":
 
     from datetime import datetime
@@ -84,7 +96,7 @@ if __name__ == "__main__":
     from alpha_vantage.techindicators import TechIndicators
     from matplotlib.pyplot import figure
 
-    
+
     #defining key variables
     now = datetime.now()
 
@@ -111,16 +123,14 @@ if __name__ == "__main__":
         symbol = input(print("Please input a stock ticker for a stock you which to get advice on. When you are done entering tickers (MAXIMUM of two stocks), please type DONE: "))
         symbol = symbol.upper()
         #some quick prelimenary input validation (in order to save time of issuing a get request)
-
-        if symbol.isdigit() == True:
+        check = input_validation(symbol)
+        if check == True:
+            symbols_list.append(symbol)
+        else:
             print_input_err_message()
+        
 
-        if len(symbol) > 5:
-            print_input_err_message()
-
-        #if it is good, add it to a list 
-        symbols_list.append(symbol)
-
+        print(check)
     #first verify if customer wants to get an email (important for UX)
     customer_response_email = input("Before we begin, would you like to enter your email in order to receive price movement alerts? (Enter 'YES' if so) ")
     customer_response_email = customer_response_email.upper()
@@ -169,11 +179,7 @@ if __name__ == "__main__":
         latest_close = parsed_response["Time Series (Daily)"][latest_day_applicable]["4. close"]
         latest_volume = parsed_response["Time Series (Daily)"][latest_day_applicable]["5. volume"]
 
-
-        #high and low calculations
         #52-week high/ low calculations
-        #define local variables
-
         max_52 = max_calc(253)
         min_52 = min_calc(253)
 
@@ -234,16 +240,16 @@ if __name__ == "__main__":
         adjusted_low_volume = 0.2 * average_volume
 
         #establishing an algocounter 
-        algo_counter = 0
+        counter = 0
         #algorithm calculations
         if float(latest_close) < adjusted_low_average:
-            algo_counter += 1
+            counter += 1
         if int(latest_volume) < adjusted_low_volume:
-            algo_counter += 1
+            counter += 1
 
 
         #the final and most crucial if
-        recommendation = algo_counter(algo_counter)
+        recommendation = algo_counter(counter)
 
 
         #Program outputs
