@@ -108,3 +108,6 @@ Run the test(s):
 ```sh
 pytest
 ```
+
+## Code Climate Software Check:
+<a href="https://codeclimate.com/github/jsoles7/robo-advisor/maintainability"><img src="https://api.codeclimate.com/v1/badges/b1f41e4c6fa5e0a03e90/maintainability" /></a>
