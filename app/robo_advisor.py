@@ -153,20 +153,6 @@ for s in symbols_list:
     max_52 = max_calc(253)
     min_52 = min_calc(253)
 
-    # max_52 = 0.0
-    # min_52 = 10000.0
-    # t = 0
-    # #use while loop to calc. max and min
-    # while (t <= 253):
-    #     high_52 = float(parsed_response["Time Series (Daily)"][time_series_keys[t]]["2. high"])
-    #     low_52 = float(parsed_response["Time Series (Daily)"][time_series_keys[t]]["3. low"])
-    #     if max_52 < high_52:
-    #         max_52 = high_52
-    #     elif min_52 > low_52:
-    #         min_52 = low_52
-    #     t +=1
-
-
 
 
 
@@ -213,24 +199,6 @@ for s in symbols_list:
     #define local variables
     max_100 = max_calc(100)
     min_100 = min_calc(100)
-    
-    # max = 0.0
-    # min = 10000.0
-    # y = 0
-    # x = 0
-    # #use while loop to calc. max and min
-    # while (x <= 100):
-    #     high = float(parsed_response["Time Series (Daily)"][time_series_keys[y]]["2. high"])
-    #     low = float(parsed_response["Time Series (Daily)"][time_series_keys[y]]["3. low"])
-    #     if max < high:
-    #         max = high
-    #     elif min > low:
-    #         min = low
-        
-    #     y +=1
-    #     x +=1
-        
-
 
 
     #the famous proprietary algorithm ;)
@@ -253,7 +221,7 @@ for s in symbols_list:
     #the final and most crucial if
     if algo_counter == 2:
         decision = 'Buy'
-        reason = "Due to the numerous functions and analyses the program run, the stock was identified as having the potential to be undervalued. "
+        reason = "BUY: Due to the numerous functions and analyses the program run, the stock was identified as having the potential to be undervalued. "
         reason = reason + "FinServ's algorithm looked at the stock's relation to trading patterns and identified it as being in a dip. "
         reason = reason + "With this as the case, there is a stronger chance of regression to the mean, implying some upside to be made! "
         reason = reason + "Feel free to check out more on this theory of investing @ https://www.investopedia.com/articles/active-trading/102914/technical-analysis-strategies-beginners.asp"

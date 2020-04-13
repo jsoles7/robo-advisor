@@ -53,6 +53,24 @@ In addition to what was said above, make sure to configure your env to fit the r
 - Sendgrid API TEMPLATE <br />
 - An email address to use for sending and receiving emailed alerts <br />
 
+
+### The `sendgrid` Package
+
+
+The `sendgrid` package provides  emailing capabilities via the [SendGrid Email Delivery Service](https://sendgrid.com/solutions/email-api/). :mailbox_with_mail: :envelope:
+
+### Installation
+
+From within a virtual environment, install `sendgrid`, if necessary:
+
+```sh
+pip install sendgrid==6.0.5
+```
+
+First, [sign up for a free account](https://signup.sendgrid.com/), then click the link in a confirmation email to verify your account. Then [create an API Key](https://app.sendgrid.com/settings/api_keys) with "full access" permissions.
+
+To setup the usage examples below, store the API Key value in an environment variable called `SENDGRID_API_KEY`. Also set an environment variable called `MY_EMAIL_ADDRESS` to be the email address you just associated with your SendGrid account (e.g. "johndoe@gmail.com").
+
 For information on how to obtain a Sendgrid API key and tempate (it's very easy by the way so don't be too concerned), check out these three explanatory links: <br />
 - https://github.com/prof-rossetti/intro-to-python/blob/master/notes/python/packages/sendgrid.md
 - https://github.com/prof-rossetti/intro-to-python/blob/master/notes/python/packages/sendgrid.md#email-templates
@@ -80,3 +98,10 @@ Then, the program will run on a per-stock basis (done via using a for loop). The
 DISCLAIMER: the authors of this program bear no liability for gains/losses on investments made based on the outputed recommendations.
 
 
+## Testing
+
+Run the test(s):
+
+```sh
+pytest
+```
