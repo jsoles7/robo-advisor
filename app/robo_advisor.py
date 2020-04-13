@@ -249,7 +249,7 @@ if __name__ == "__main__":
 
 
         #the final and most crucial if
-        recommendation = algo_counter(counter)
+        recommendation = algo_output(counter)
 
 
         #Program outputs
