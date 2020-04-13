@@ -75,7 +75,7 @@ def input_validation(input):
     if any(char.isdigit() for char in input) == True:
         result_bool = False
 
-    if len(symbol) > 5:
+    if len(input) > 5:
         result_bool = False
     
     return result_bool

@@ -35,7 +35,10 @@ Proceed to download the following packages: <br />
 - pip install alpha_vantage <br />
 
 <br />
-**Note that you can simply run the command 'pip install -r requirements.txt' to expedite the above process
+**Note that you can simply run the following command to expedite the above process:
+```sh
+pip install -r requirements.txt
+```
 <br />
 
 ## Setting up the Environment:
