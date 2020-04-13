@@ -1,6 +1,6 @@
 
 
-from app.robo_advisor import to_usd, algo_output, input_validation
+from app.robo_advisor import to_usd, algo_output, input_validation, min_calc
 #, min_calc, max_calc, 
 
 def test_to_usd():
@@ -32,3 +32,5 @@ def test_input_validation():
 
     #Should result in True
     assert input_validation("TSLA") == True
+
+

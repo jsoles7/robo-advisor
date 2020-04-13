@@ -12,10 +12,21 @@ import matplotlib.pyplot as plt
 #defining applicable functions for main program (avoiding code reduplication)
 #to_usd function adapted from that one given/ developed by Professor Rossetti
 def to_usd(my_price):
+    """
+        This function is used to convert float numbers passed to it to a formatted price in traditional US format.
+
+        Source: Prof. Rossetti's In class Example.
+
+    """
     return "${0:,.2f}".format(my_price)
 
 #error message printing function
 def print_input_err_message():
+    """
+        This function prints an error message and then exits. It occurs whenever there is input validation errors or HTTP request errors.
+
+    """
+
     print("")
     print("OOPS, couldn't find that symbol, please try again and input symbols in the following format: MSFT")
     print("Please try run the program again. Thank you!")
@@ -24,6 +35,12 @@ def print_input_err_message():
 
 #max/ min calc functions
 def min_calc(total_days):
+    """
+        This function is used to calculate the minimum share price given a set of days. 
+        It proceeds to tally up the lows for each of those days in the given range.
+        It will then get the minimum out of those lows to calculate a share price.
+
+    """
 
     #define local variables
     min_1 = 10000.0
@@ -37,7 +54,12 @@ def min_calc(total_days):
     return min_1 
 
 def max_calc(total_days):
+    """
+        This function is used to calculate the maximum share price given a set of days. 
+        It proceeds to tally up the highs for each of those days in the given range.
+        It will then get the maximum out of those lows to calculate a share price.
 
+    """
     #define local variables
     max_1 = 0
     t = 0
@@ -50,6 +72,12 @@ def max_calc(total_days):
     return max_1 
 
 def algo_output(algo_counter):
+    """
+        This function is used to determine the appropriate output for the algorithm.
+        It takes in the algo_counter number as an argument (determined by calculations in the script),
+        And it spits out the recommended action and reason.
+
+    """
     if algo_counter == 2:
         reason = "BUY: Due to the numerous functions and analyses the program run, the stock was identified as having the potential to be undervalued. "
         reason = reason + "FinServ's algorithm looked at the stock's relation to trading patterns and identified it as being in a dip. "
@@ -69,7 +97,12 @@ def algo_output(algo_counter):
     return reason
 
 def input_validation(input):
+    """
+        This function is used to test the stock ticker inputs and validate that they
+        pass the two key characteristics tests: being less than 5 characters in length
+        and having no digits.
 
+    """
     result_bool = True 
 
     if any(char.isdigit() for char in input) == True:
@@ -130,7 +163,6 @@ if __name__ == "__main__":
             print_input_err_message()
         
 
-        print(check)
     #first verify if customer wants to get an email (important for UX)
     customer_response_email = input("Before we begin, would you like to enter your email in order to receive price movement alerts? (Enter 'YES' if so) ")
     customer_response_email = customer_response_email.upper()
@@ -163,9 +195,9 @@ if __name__ == "__main__":
         #handle response errors
         if "Error Message" in response.text:
             print_input_err_message()
-
         elif "ValueError" in response.text:
             print_input_err_message()
+
 
         #print(parsed_response)
         latest_refresh = parsed_response["Meta Data"]["3. Last Refreshed"]
