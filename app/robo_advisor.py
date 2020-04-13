@@ -64,6 +64,25 @@ def max_calc(total_days):
         t +=1
     return max_1 
 
+def algo_output(algo_counter):
+    if algo_counter == 2:
+        reason = "BUY: Due to the numerous functions and analyses the program run, the stock was identified as having the potential to be undervalued. "
+        reason = reason + "FinServ's algorithm looked at the stock's relation to trading patterns and identified it as being in a dip. "
+        reason = reason + "With this as the case, there is a stronger chance of regression to the mean, implying some upside to be made! "
+        reason = reason + "Feel free to check out more on this theory of investing @ https://www.investopedia.com/articles/active-trading/102914/technical-analysis-strategies-beginners.asp"
+    elif algo_counter == 1:
+        reason = "NEUTRAL WEIGHTING: Due to the numerous functions and analyses the program run, the stock was identified as having the potential to be neither overvalued or undervalued. "
+        reason = reason + "FinServ's algorithm looked at the stock's relation to trading patterns and identified it as being inline with current performance. "
+        reason = reason + "With this as the case, there is a minimal chance of regression to the mean, implying some no upside or downside. "
+        reason = reason + "Feel free to check out more on this theory of investing @ https://www.investopedia.com/articles/active-trading/102914/technical-analysis-strategies-beginners.asp"
+    else:
+        reason = "SELL: Due to the numerous functions and analyses the program run, the stock was identified as having the potential to be overvalued. "
+        reason = reason + "FinServ's algorithm looked at the stock's relation to trading patterns and identified it as being at a crest. "
+        reason = reason + "With this as the case, there is a stronger chance of regression to the mean, implying some downside to potentially be met. "
+        reason = reason + "Feel free to check out more on this theory of investing @ https://www.investopedia.com/articles/active-trading/102914/technical-analysis-strategies-beginners.asp"
+
+    return reason
+
 # Key here
 ALPHA_VANTAGE_API_KEY = os.environ.get("ALPHAVANTAGE_API_KEY")
 
@@ -219,24 +238,7 @@ for s in symbols_list:
 
 
     #the final and most crucial if
-    if algo_counter == 2:
-        decision = 'Buy'
-        reason = "BUY: Due to the numerous functions and analyses the program run, the stock was identified as having the potential to be undervalued. "
-        reason = reason + "FinServ's algorithm looked at the stock's relation to trading patterns and identified it as being in a dip. "
-        reason = reason + "With this as the case, there is a stronger chance of regression to the mean, implying some upside to be made! "
-        reason = reason + "Feel free to check out more on this theory of investing @ https://www.investopedia.com/articles/active-trading/102914/technical-analysis-strategies-beginners.asp"
-    elif algo_counter == 1:
-        decision = "Neutral Weighting"
-        reason = "Due to the numerous functions and analyses the program run, the stock was identified as having the potential to be neither overvalued or undervalued. "
-        reason = reason + "FinServ's algorithm looked at the stock's relation to trading patterns and identified it as being inline with current performance. "
-        reason = reason + "With this as the case, there is a minimal chance of regression to the mean, implying some no upside or downside. "
-        reason = reason + "Feel free to check out more on this theory of investing @ https://www.investopedia.com/articles/active-trading/102914/technical-analysis-strategies-beginners.asp"
-    else:
-        decision = "Sell"
-        reason = "Due to the numerous functions and analyses the program run, the stock was identified as having the potential to be overvalued. "
-        reason = reason + "FinServ's algorithm looked at the stock's relation to trading patterns and identified it as being at a crest. "
-        reason = reason + "With this as the case, there is a stronger chance of regression to the mean, implying some downside to potentially be met. "
-        reason = reason + "Feel free to check out more on this theory of investing @ https://www.investopedia.com/articles/active-trading/102914/technical-analysis-strategies-beginners.asp"
+    recommendation = algo_counter(algo_counter)
 
 
     #Program outputs
@@ -254,8 +256,7 @@ for s in symbols_list:
     print("52-WEEK HIGH: " + to_usd(max_52))
     print("52-WEEK LOW: "+ to_usd(min_52))
     print("-------------------------")
-    print("RECOMMENDATION: " + decision)
-    print("RECOMMENDATION REASON: " + reason)
+    print("RECOMMENDATION: " + recommendation)
     print("-------------------------")
     print("")
     print("")
