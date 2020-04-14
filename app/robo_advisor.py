@@ -118,6 +118,14 @@ def request_url(ticker, API_key):
     link = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&outputsize=full&symbol={ticker}&apikey={API_key}"
     return link 
 
+def adj_low_price(mean_price):
+
+    return 0.4 * mean_price
+
+def adj_low_volume(mean_volume):
+
+    return 0.2 * mean_volume
+
 
 #main program
 
@@ -191,9 +199,9 @@ if __name__ == "__main__":
 
         #proceed to scrape, one additional input check is provided below to catch any other errors 
         #scrapping what is required from web 
-        request_url = request_url(s, ALPHA_VANTAGE_API_KEY)
+        url = str(request_url(s, ALPHA_VANTAGE_API_KEY))
 
-        response = requests.get(request_url)
+        response = requests.get(url)
 
         #parse from the response text into dictionary
         parsed_response = json.loads(response.text)
@@ -274,8 +282,8 @@ if __name__ == "__main__":
         #calculate averages to use for algorithm
         average_volume = total_volume/(len(time_series_keys))
         average_price = total_close/(len(time_series_keys))
-        adjusted_low_average = 0.4 * average_price
-        adjusted_low_volume = 0.2 * average_volume
+        adjusted_low_average = adj_low_price(average_price)
+        adjusted_low_volume = adj_low_volume(average_volume)
 
         #establishing an algocounter 
         counter = 0
