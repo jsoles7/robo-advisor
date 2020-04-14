@@ -114,18 +114,54 @@ def input_validation(input):
     return result_bool
 
 def request_url(ticker, API_key):
+    """
+        This function is used to compile an accessible ALPHA VANTAGE link using he ticker and API key as inputs.
+        This allows the program to use the API to get stock data.
 
+    """
     link = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&outputsize=full&symbol={ticker}&apikey={API_key}"
     return link 
 
 def adj_low_price(mean_price):
+    """
+        This function is used to calculate an adjusted mean value in order to use it in the algorithm calculations.
+        It takes 40% of the average given.
 
+    """
     return 0.4 * mean_price
 
 def adj_low_volume(mean_volume):
+    """
+        This function is used to calculate an adjusted mean value in order to use it in the algorithm calculations.
+        It takes 20% of the average given.
 
+    """
     return 0.2 * mean_volume
 
+def visualization(key, s):
+    """
+        This function is used to create the stock chart visualization. It receives the API key and the ticker
+        as arguments and then produces the plot as a result.
+
+    """
+    #this was adopted from the alpha vantage customer service website/ github
+    #https://medium.com/alpha-vantage/get-started-with-alpha-vantage-data-619a70c7f33a
+    key = ALPHA_VANTAGE_API_KEY
+    ts = TimeSeries(key, output_format='pandas')
+    ti = TechIndicators(key)
+
+    # Get the data, returns a tuple
+    # stock_data is a pandas dataframe
+    # note that the API is requested one more time 
+    stock_data, stock_meta_data = ts.get_daily(symbol=s)
+
+
+    # Visualization
+    figure(num=None, figsize=(15, 6), dpi=80, facecolor='w', edgecolor='k')
+    stock_data['4. close'].plot()
+    plt.tight_layout()
+    plt.grid()
+    plt.show()
 
 #main program
 
@@ -151,7 +187,7 @@ if __name__ == "__main__":
     ALPHA_VANTAGE_API_KEY = os.environ.get("ALPHAVANTAGE_API_KEY")
 
 
-
+    #PART 1: client inputs and program initialization
 
     #receiving client inputs
     print("")
@@ -163,7 +199,6 @@ if __name__ == "__main__":
     #define list + symbol
     symbols_list = []
     symbol = ""
-
 
     #input multiple stocks:
     while symbol != "DONE":
@@ -193,6 +228,8 @@ if __name__ == "__main__":
     #remove the DONE
     symbols_list.pop()
 
+
+    #PART 2: taking in the tickers and obtaining the data from the server online + running important calculations on the data
 
     #running loop to run analysis for each symbol 
     for s in symbols_list:
@@ -230,7 +267,7 @@ if __name__ == "__main__":
         min_52 = min_calc(253)
 
 
-
+        #PART 2.5: Writing the data into a CSV file
 
         #writing the data to a file
         #define file name
@@ -277,7 +314,7 @@ if __name__ == "__main__":
         min_100 = min_calc(100)
 
 
-        #the famous proprietary algorithm ;)
+        #PART 3: The Algorithm calculation 
 
         #calculate averages to use for algorithm
         average_volume = total_volume/(len(time_series_keys))
@@ -298,7 +335,7 @@ if __name__ == "__main__":
         recommendation = algo_output(counter)
 
 
-        #Program outputs
+        #PART 4: The Program outputs (in a UX-friendly way)
         print("-------------------------")
         print("SELECTED SYMBOL: " + s)
         print("-------------------------")
@@ -319,27 +356,13 @@ if __name__ == "__main__":
         print("")
 
 
-        #data visualization
-        #this was adopted from the alpha vantage customer service website/ github
-        #https://medium.com/alpha-vantage/get-started-with-alpha-vantage-data-619a70c7f33a
+        #Part 5: Data Visualization
+        
 
-        key = ALPHA_VANTAGE_API_KEY
-        ts = TimeSeries(key, output_format='pandas')
-        ti = TechIndicators(key)
+        visualization(ALPHA_VANTAGE_API_KEY, s)
+    
 
-        # Get the data, returns a tuple
-        # stock_data is a pandas dataframe
-        # note that the API is requested one more time 
-        stock_data, stock_meta_data = ts.get_daily(symbol=s)
-
-
-        # Visualization
-        figure(num=None, figsize=(15, 6), dpi=80, facecolor='w', edgecolor='k')
-        stock_data['4. close'].plot()
-        plt.tight_layout()
-        plt.grid()
-        plt.show()
-
+        #Part 6: Customer Email and SendGrid Integration
 
         #get customer email
         from sendgrid import SendGridAPIClient
@@ -392,6 +415,8 @@ if __name__ == "__main__":
                 except Exception as e:
                     print("OOPS", e)
 
+
+    #Part 7: Conclusion of Program
 
     print("")
     print("-------------------------")
