@@ -34,7 +34,7 @@ def print_input_err_message():
     exit()
 
 #max/ min calc functions
-def min_calc(total_days):
+def min_calc(total_days, dictionary, time_series):
     """
         This function is used to calculate the minimum share price given a set of days. 
         It proceeds to tally up the lows for each of those days in the given range.
@@ -46,14 +46,14 @@ def min_calc(total_days):
     min_1 = 10000.0
     t = 0
     #use while loop to calc. max and min
-    while (t <= total_days):
-        low = float(parsed_response["Time Series (Daily)"][time_series_keys[t]]["3. low"])
+    while (t < total_days):
+        low = float(dictionary["Time Series (Daily)"][time_series[t]]["3. low"])
         if min_1 > low:
             min_1 = low
         t +=1
     return min_1 
 
-def max_calc(total_days):
+def max_calc(total_days, dictionary, time_series):
     """
         This function is used to calculate the maximum share price given a set of days. 
         It proceeds to tally up the highs for each of those days in the given range.
@@ -64,8 +64,8 @@ def max_calc(total_days):
     max_1 = 0
     t = 0
     #use while loop to calc. max and min
-    while (t <= total_days):
-        high = float(parsed_response["Time Series (Daily)"][time_series_keys[t]]["2. high"])
+    while (t < total_days):
+        high = float(dictionary["Time Series (Daily)"][time_series[t]]["2. high"])
         if max_1 < high:
             max_1 = high
         t +=1
@@ -162,6 +162,17 @@ def visualization(key, s):
     plt.tight_layout()
     plt.grid()
     plt.show()
+
+def movement_calc(latest_price, average):
+    """
+        This function is used to calculate a movement variable used to determine email content.
+        It takes in a latest price and an average price and determines the percent change.
+    """
+    latest_price = float(latest_price)
+    numerator = latest_price - average
+    answer = numerator/ average
+    return answer
+
 
 #main program
 
@@ -263,8 +274,8 @@ if __name__ == "__main__":
         latest_volume = parsed_response["Time Series (Daily)"][latest_day_applicable]["5. volume"]
 
         #52-week high/ low calculations
-        max_52 = max_calc(253)
-        min_52 = min_calc(253)
+        max_52 = max_calc(253,parsed_response,time_series_keys)
+        min_52 = min_calc(253,parsed_response,time_series_keys)
 
 
         #PART 2.5: Writing the data into a CSV file
@@ -310,8 +321,8 @@ if __name__ == "__main__":
 
         #recent high/ low calculations
         #define local variables
-        max_100 = max_calc(100)
-        min_100 = min_calc(100)
+        max_100 = max_calc(100,parsed_response,time_series_keys)
+        min_100 = min_calc(100,parsed_response,time_series_keys)
 
 
         #PART 3: The Algorithm calculation 
@@ -373,8 +384,8 @@ if __name__ == "__main__":
         if customer_response_email == 'YES':
 
             #calc movement 
-            movement = (float(latest_close) - (average_price) )/ average_price
-            movement_str = f"{0:,.2f}%".format(movement)
+            movement = (movement_calc(latest_close, average_price))*100
+            movement_str = f"{movement:,.2f}%"
 
             #only send the email if the price movement is significant 
 
@@ -429,5 +440,4 @@ if __name__ == "__main__":
     print("")
     print("Thank you for using FinServ 2.0 Robo Stock Advisor! We hope you got the information you were looking for \n")
     print("If you think there is a way we can improve our service, contact us at customerrelations@finserv.io")
-    print("")
     print("")
