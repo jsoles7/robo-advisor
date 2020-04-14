@@ -49,8 +49,3 @@ def test_adj_low_volume():
     vol = adj_low_volume(100)
     assert vol == 20
 
-def test_min_calc():
-    min_52 = min_calc(253)
-    assert min_52 == 300
-
-
