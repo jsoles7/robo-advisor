@@ -1,7 +1,6 @@
 
 
-from app.robo_advisor import to_usd, algo_output, input_validation
-#, min_calc, max_calc, 
+from app.robo_advisor import to_usd, algo_output, input_validation, request_url, adj_low_volume, adj_low_price, min_calc
 
 def test_to_usd():
     #Should apply correct formatting
@@ -32,3 +31,21 @@ def test_input_validation():
 
     #Should result in True
     assert input_validation("TSLA") == True
+
+
+def test_request_url():
+    #Should return the correct link in proper format
+    link = request_url("MSFT", "API_KEY")
+    assert link == "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&outputsize=full&symbol=MSFT&apikey=API_KEY"
+
+def test_adj_low_price():
+    #Should return the 40% of the given number
+    result = adj_low_price(100)
+    assert result == 40
+
+
+def test_adj_low_volume():
+    #Should return the 20% of the given number
+    vol = adj_low_volume(100)
+    assert vol == 20
+
