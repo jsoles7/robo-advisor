@@ -17,6 +17,9 @@ def to_usd(my_price):
 
         Source: Prof. Rossetti's In class Example.
 
+        @param: the my_price variable is a price input that comes as a float (e.g. 13.98570) and 
+                represents a variable that is supposed to be converted to a price format.
+
     """
     return "${0:,.2f}".format(my_price)
 
@@ -24,6 +27,8 @@ def to_usd(my_price):
 def print_input_err_message():
     """
         This function prints an error message and then exits. It occurs whenever there is input validation errors or HTTP request errors.
+
+        @param: none.
 
     """
 
@@ -39,6 +44,10 @@ def min_calc(total_days, dictionary, time_series):
         This function is used to calculate the minimum share price given a set of days. 
         It proceeds to tally up the lows for each of those days in the given range.
         It will then get the minimum out of those lows to calculate a share price.
+
+        @param: three inputs are required for this function: the first is an integer that represents total days for which
+                you wish to calculate the minimum (e.g. 100); the second is a dictionary that is passed; and the 
+                third is a list that is supposed to contain the different day keys.
 
     """
 
@@ -59,6 +68,10 @@ def max_calc(total_days, dictionary, time_series):
         It proceeds to tally up the highs for each of those days in the given range.
         It will then get the maximum out of those lows to calculate a share price.
 
+        @param: three inputs are required for this function: the first is an integer that represents total days for which
+                you wish to calculate the maximum (e.g. 100); the second is a dictionary that is passed; and the 
+                third is a list that is supposed to contain the different day keys.
+
     """
     #define local variables
     max_1 = 0
@@ -76,6 +89,9 @@ def algo_output(algo_counter):
         This function is used to determine the appropriate output for the algorithm.
         It takes in the algo_counter number as an argument (determined by calculations in the script),
         And it spits out the recommended action and reason.
+
+        @param: algo_counter is a numeric input that comes as an integer and represents the score the algorithm's calculations
+                have have given so far.
 
     """
     if algo_counter == 2:
@@ -102,6 +118,8 @@ def input_validation(input):
         pass the two key characteristics tests: being less than 5 characters in length
         and having no digits.
 
+        @param: input is a string argument that represents the given input the consumer gave as a ticker.
+
     """
     result_bool = True 
 
@@ -118,6 +136,9 @@ def request_url(ticker, API_key):
         This function is used to compile an accessible ALPHA VANTAGE link using he ticker and API key as inputs.
         This allows the program to use the API to get stock data.
 
+        @param: two parameters are passed to this function. The first is the ticker (which has already been validated) 
+                and is a string. The second is the API key which is a string.
+
     """
     link = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&outputsize=full&symbol={ticker}&apikey={API_key}"
     return link 
@@ -127,6 +148,8 @@ def adj_low_price(mean_price):
         This function is used to calculate an adjusted mean value in order to use it in the algorithm calculations.
         It takes 40% of the average given.
 
+        @param: the parameter is a float variable that is supposed to be the mean price calculated from the time_series data.
+
     """
     return 0.4 * mean_price
 
@@ -135,6 +158,8 @@ def adj_low_volume(mean_volume):
         This function is used to calculate an adjusted mean value in order to use it in the algorithm calculations.
         It takes 20% of the average given.
 
+        @param: the parameter is a float variable that is supposed to be the mean volume calculated from the time_series data.
+
     """
     return 0.2 * mean_volume
 
@@ -142,6 +167,9 @@ def visualization(key, s):
     """
         This function is used to create the stock chart visualization. It receives the API key and the ticker
         as arguments and then produces the plot as a result.
+
+        @param: this function has two parameters: the first is the API key that is a string. The second is the stock ticker
+                which is a string and has already been validated. 
 
     """
     #this was adopted from the alpha vantage customer service website/ github
@@ -167,8 +195,10 @@ def movement_calc(latest_price, average):
     """
         This function is used to calculate a movement variable used to determine email content.
         It takes in a latest price and an average price and determines the percent change.
+
+        @param: this function has two parameters: the first is a float variable that is the latest price calculated
+                from the time_series. The second is the average price, a float variable, calculated from the time_series. 
     """
-    latest_price = float(latest_price)
     numerator = latest_price - average
     answer = numerator/ average
     return answer
