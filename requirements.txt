@@ -4,3 +4,4 @@ alpha_vantage
 pandas
 matplotlib
 sendgrid 
+pytest
